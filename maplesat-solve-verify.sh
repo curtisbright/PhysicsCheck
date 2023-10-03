@@ -34,4 +34,8 @@ else
     ./maplesat-ks/simp/maplesat_static $f $f.drat -perm-out=$f.perm -exhaustive=$e -order=$n -no-pre -minclause -max-proof-size=7168 -unembeddable-check=1 -unembeddable-out="$f.nonembed" | tee $f.log
 fi
 
-./proof-module.sh $n $f $f.verify
+if ! grep -q "UNSAT" "$f.log"; then
+        ./proof-module.sh $n $f $f.verify f
+else
+        ./proof-module.sh $n $f $f.verify
+fi
