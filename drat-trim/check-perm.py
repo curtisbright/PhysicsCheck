@@ -113,8 +113,11 @@ if len(sys.argv) <= 2:
 n = int(sys.argv[1])
 permfile = sys.argv[2]
 
-# The 10-vertex and 15-edge minimal unembeddble graph I{O_ogI@W
-unembeddable_graph_0 = [[-1, 1, 1, 1, 0, 0, 0, 0, 0, 0], [1, -1, 1, 0, 1, 0, 0, 0, 0, 0], [1, 1, -1, 0, 0, 1, 0, 0, 0, 0], [1, 0, 0, -1, 0, 0, 1, 1, 0, 0], [0, 1, 0, 0, -1, 0, 1, 0, 1, 0], [0, 0, 1, 0, 0, -1, 0, 1, 0, 1], [0, 0, 0, 1, 1, 0, -1, 0, 1, 0], [0, 0, 0, 1, 0, 1, 0, -1, 0, 1], [0, 0, 0, 0, 1, 0, 1, 0, -1, 1], [0, 0, 0, 0, 0, 1, 0, 1, 1, -1]]
+unembeddable_graphs = []
+# The 10-vertex and 15-edge minimal unembeddable graph I{O_ogI@W
+unembeddable_graphs.append([[-1, 1, 1, 1, 0, 0, 0, 0, 0, 0], [1, -1, 1, 0, 1, 0, 0, 0, 0, 0], [1, 1, -1, 0, 0, 1, 0, 0, 0, 0], [1, 0, 0, -1, 0, 0, 1, 1, 0, 0], [0, 1, 0, 0, -1, 0, 1, 0, 1, 0], [0, 0, 1, 0, 0, -1, 0, 1, 0, 1], [0, 0, 0, 1, 1, 0, -1, 0, 1, 0], [0, 0, 0, 1, 0, 1, 0, -1, 0, 1], [0, 0, 0, 0, 1, 0, 1, 0, -1, 1], [0, 0, 0, 0, 0, 1, 0, 1, 1, -1]])
+# The 10-vertex and 16-edge minimal unembeddable graph I{d@?gI@w
+unembeddable_graphs.append([[-1, 1, 1, 1, 1, 0, 0, 0, 0, 0], [1, -1, 1, 0, 0, 1, 0, 0, 0, 0], [1, 1, -1, 0, 0, 0, 1, 0, 0, 0], [1, 0, 0, -1, 1, 0, 0, 1, 0, 0], [1, 0, 0, 1, -1, 0, 0, 0, 1, 0], [0, 1, 0, 0, 0, -1, 0, 1, 0, 1], [0, 0, 1, 0, 0, 0, -1, 0, 1, 1], [0, 0, 0, 1, 0, 1, 0, -1, 0, 1], [0, 0, 0, 0, 1, 0, 1, 0, -1, 1], [0, 0, 0, 0, 0, 1, 1, 1, 1, -1]])
 
 c = 1
 d_i = dict()
@@ -144,13 +147,14 @@ for perm in fileinput.input(permfile):
 		c += 1
 		continue
 
-	if "Minimal unembeddable subgraph 0" in perm:
+	if "Minimal unembeddable subgraph" in perm:
+		graph_index = int(perm.split(":")[0].split(" ")[-1]) # Index of the unembeddable graph
 		perm = perm.split(":")[1] # Discard all but the permutation
 		perm = list(map(int, perm.split()))
 		extend_perm(perm)
 		perm = inv(perm)
 		M2 = to_matrix_perm(line, perm)
-		assert(matrix_edges_equal(unembeddable_graph_0, M2, 10))
+		assert(matrix_edges_equal(unembeddable_graphs[graph_index], M2, 10))
 		unembed += 1
 		c += 1
 		continue
