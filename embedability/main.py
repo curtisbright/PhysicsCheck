@@ -186,7 +186,7 @@ def determine_embed(g, assignments, g_sat, order, index, using_subgraph, normali
     output_sat_f: file name to log embeddable graphs
     verify: option to verify embeddable graph's vector solutions, will log vector solutions and verification results to output_sat_f
     """
-    assignment = assignments[int(index)]
+    assignment = assignments[index]
     s = Solver()
     ver = {}
     #revert assign dict
@@ -244,8 +244,7 @@ def determine_embed(g, assignments, g_sat, order, index, using_subgraph, normali
     result = s.check()
     if result == unknown:
         print("Timeout reached: Embeddability unknown, checking next intepretation")
-        index = int(index) + 1
-        main_single_graph(g_sat, order, index, using_subgraph, normalize, output_unsat_f, output_sat_f, verify)
+        return False
     if result == unsat:
         # print("Not embeddable")
         with open(output_unsat_f, "a+") as f:
@@ -262,7 +261,6 @@ def determine_embed(g, assignments, g_sat, order, index, using_subgraph, normali
             for vec in g:
                 if m.evaluate(ver[vec][0] == 0) and m.evaluate(ver[vec][1] == 0) and m.evaluate(ver[vec][2] == 0):
                     print ("vector is the zero vector")
-                    return
             #check non-colinear between all vertices
             for vec_1 in g:
                 for vec_2 in g:
@@ -270,14 +268,12 @@ def determine_embed(g, assignments, g_sat, order, index, using_subgraph, normali
                         dot_prod = dot(ver[vec_1], ver[vec_2]) 
                         if m.evaluate(dot_prod * dot_prod == norm2(ver[vec_1]) * norm2(ver[vec_2])):
                             print ("vectors are colinear, verification failed")
-                            return
             #check orthgonality between all connected vertices
             for vec in g:
                 for adj_vec in g[vec]:
                     real_dot = (m.evaluate(dot(ver[vec], ver[adj_vec]) == 0))
                     if not real_dot:
                         print ("connected vertices are not orthogonal, verification failed")
-                        return
             #check if u is orthogonal to v and w, then u cross (v cross w) = 0
             for vec in g:
                 for vec_1 in g[vec]:
@@ -290,7 +286,7 @@ def determine_embed(g, assignments, g_sat, order, index, using_subgraph, normali
                             cross_prod_2_check = m.evaluate(ver[vec][0] == cross_prod_2[0]) and m.evaluate(ver[vec][1] == cross_prod_2[1]) and m.evaluate(ver[vec][2] == cross_prod_2[2]) 
                             if not cross_prod_1_check and not cross_prod_2_check:
                                 print ("mutually orthogonal vectors does not satisfy cross product constraint")
-                                return
+    return True
 
 #graph in sat labeling format
 
@@ -339,13 +335,19 @@ def main_single_graph(g, order, index, using_subgraph, normalize=False, output_u
         for v in list(G.nodes()):
             graph_dict[v] = (list(G.neighbors(v)))
         assignments = find_assignments(graph_dict)
-        determine_embed(graph_dict, assignments, g, order, index, using_subgraph, normalize, output_unsat_f, output_sat_f, verify) #write the file
+        solved = False
+        while not solved:
+            solved = determine_embed(graph_dict, assignments, g, order, index, using_subgraph, normalize, output_unsat_f, output_sat_f, verify) #write the file
+            index += 1
     else:
         graph_dict = {}
         for v in list(G.nodes()):
             graph_dict[v] = (list(G.neighbors(v)))
         assignments = find_assignments(graph_dict)
-        determine_embed(graph_dict, assignments, g, order, index, using_subgraph, normalize, output_unsat_f, output_sat_f, verify) #write the file
+        solved = False
+        while not solved:
+            solved = determine_embed(graph_dict, assignments, g, order, index, using_subgraph, normalize, output_unsat_f, output_sat_f, verify) #write the file
+            index += 1
 
 
 def main(file_to_solve, order, index, using_subgraph, normalize=False, output_unsat_f="output_unsat_f", output_sat_f="output_sat_f", verify=True, start=None, end=None):
@@ -358,4 +360,4 @@ def main(file_to_solve, order, index, using_subgraph, normalize=False, output_un
             main_single_graph(line, order, index, using_subgraph, normalize, output_unsat_f, output_sat_f, verify)
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]=="True", sys.argv[5]=="True", sys.argv[6], sys.argv[7], sys.argv[8]=="True", sys.argv[9], sys.argv[10])
+    main(sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4]=="True", sys.argv[5]=="True", sys.argv[6], sys.argv[7], sys.argv[8]=="True", sys.argv[9], sys.argv[10])

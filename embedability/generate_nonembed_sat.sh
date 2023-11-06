@@ -116,7 +116,7 @@ start=`date +%s.%N`
 index=0
 echo "running embeddability check on all graphs"
 
-python3 main.py squarefree_$n.exhaust "$n" "$index" $using_subgraph False nonembed_graph_sat_$n.txt embed_graph_sat_$n.txt $verify
+python3 main.py squarefree_$n.exhaust "$n" "$index" $using_subgraph False nonembed_graph_sat_$n.txt embed_graph_sat_$n.txt $verify None None
 
 end=`date +%s.%N`
 runtime=$( echo "$end - $start" | bc -l )
