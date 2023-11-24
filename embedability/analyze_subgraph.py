@@ -117,28 +117,95 @@ def filter_non_minimal_12():
     except:
         print ("make sure all files are generated")
         sys.exit(1)
-    temp_lst_12 = graph_lst_12.copy()
+    temp_lst_13 = graph_lst_12.copy()
     for graph in graph_lst_12:
         for g in graph_lst_12:
             if graph != g:
                 GM = isomorphism.GraphMatcher(nx.Graph(maple_to_edges(graph, 12)), nx.Graph(maple_to_edges(g, 12)))
                 if GM.subgraph_is_monomorphic():
-                    if graph in temp_lst_12:
-                        temp_lst_12.remove(graph)
+                    if graph in temp_lst_13:
+                        temp_lst_13.remove(graph)
     for graph in graph_lst_12:
         for g in graph_lst_10:
             GM = isomorphism.GraphMatcher(nx.Graph(maple_to_edges(graph, 12)), nx.Graph(maple_to_edges(g, 10)))
             if GM.subgraph_is_monomorphic():
-                if graph in temp_lst_12:
-                    temp_lst_12.remove(graph)
+                if graph in temp_lst_13:
+                    temp_lst_13.remove(graph)
     for graph in graph_lst_12:
         for g in graph_lst_11:
             GM = isomorphism.GraphMatcher(nx.Graph(maple_to_edges(graph, 12)), nx.Graph(maple_to_edges(g, 11)))
             if GM.subgraph_is_monomorphic():
-                if graph in temp_lst_12:
-                    temp_lst_12.remove(graph)
+                if graph in temp_lst_13:
+                    temp_lst_13.remove(graph)
     f = open("min_nonembed_graph_sat_12.txt", "w")
-    for item in temp_lst_12:
+    for item in temp_lst_13:
+        f.write(item + "\n")
+    f.close()
+
+def verify(n):
+    """n has to be either 10, 11, or 12"""
+    if int(n) == 10:
+        filter_non_minimal_10()
+    elif int(n) == 11:
+        filter_non_minimal_11()
+    elif int(n) == 12:
+        filter_non_minimal_12()
+    elif int(n) == 13:
+        filter_non_minimal_13()
+    else:
+        print ("currently only taking order 10, 11, 12, or 13 for analyze_subgraph.py")
+
+def filter_non_minimal_13():
+    try:
+        file_13 = open("nonembed_graph_sat_13.txt", "r")
+        content = file_13.read()
+        graph_lst_13 = content.split("\n")
+        if '' in graph_lst_13:
+            graph_lst_13.remove('')
+        file_13.close()
+        file_12 = open("min_nonembed_graph_sat_12.txt", "r")
+        content = file_12.read()
+        graph_lst_12 = content.split("\n")
+        if '' in graph_lst_12:
+            graph_lst_12.remove('')
+        file_12.close()
+        file_11 = open("min_nonembed_graph_sat_11.txt", "r")
+        content = file_11.read()
+        graph_lst_11 = content.split("\n")
+        if '' in graph_lst_11:
+            graph_lst_11.remove('')
+        file_11.close()
+        file_10 = open("min_nonembed_graph_sat_10.txt", "r")
+        content = file_10.read()
+        graph_lst_10 = content.split("\n")
+        if '' in graph_lst_10:
+            graph_lst_10.remove('')
+        file_10.close()
+    except:
+        print ("make sure all files are generated")
+        sys.exit(1)
+    temp_lst_13 = graph_lst_13.copy()
+    for graph in graph_lst_13:
+        for g in graph_lst_12:
+            if graph != g:
+                GM = isomorphism.GraphMatcher(nx.Graph(maple_to_edges(graph, 13)), nx.Graph(maple_to_edges(g, 12)))
+                if GM.subgraph_is_monomorphic():
+                    if graph in temp_lst_13:
+                        temp_lst_13.remove(graph)
+    for graph in graph_lst_13:
+        for g in graph_lst_10:
+            GM = isomorphism.GraphMatcher(nx.Graph(maple_to_edges(graph, 13)), nx.Graph(maple_to_edges(g, 10)))
+            if GM.subgraph_is_monomorphic():
+                if graph in temp_lst_13:
+                    temp_lst_13.remove(graph)
+    for graph in graph_lst_13:
+        for g in graph_lst_11:
+            GM = isomorphism.GraphMatcher(nx.Graph(maple_to_edges(graph, 13)), nx.Graph(maple_to_edges(g, 11)))
+            if GM.subgraph_is_monomorphic():
+                if graph in temp_lst_13:
+                    temp_lst_13.remove(graph)
+    f = open("min_nonembed_graph_sat_13.txt", "w")
+    for item in temp_lst_13:
         f.write(item + "\n")
     f.close()
 
