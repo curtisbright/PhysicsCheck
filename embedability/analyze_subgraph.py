@@ -117,28 +117,28 @@ def filter_non_minimal_12():
     except:
         print ("make sure all files are generated")
         sys.exit(1)
-    temp_lst_13 = graph_lst_12.copy()
+    temp_lst_12 = graph_lst_12.copy()
     for graph in graph_lst_12:
         for g in graph_lst_12:
             if graph != g:
                 GM = isomorphism.GraphMatcher(nx.Graph(maple_to_edges(graph, 12)), nx.Graph(maple_to_edges(g, 12)))
                 if GM.subgraph_is_monomorphic():
-                    if graph in temp_lst_13:
-                        temp_lst_13.remove(graph)
+                    if graph in temp_lst_12:
+                        temp_lst_12.remove(graph)
     for graph in graph_lst_12:
         for g in graph_lst_10:
             GM = isomorphism.GraphMatcher(nx.Graph(maple_to_edges(graph, 12)), nx.Graph(maple_to_edges(g, 10)))
             if GM.subgraph_is_monomorphic():
-                if graph in temp_lst_13:
-                    temp_lst_13.remove(graph)
+                if graph in temp_lst_12:
+                    temp_lst_12.remove(graph)
     for graph in graph_lst_12:
         for g in graph_lst_11:
             GM = isomorphism.GraphMatcher(nx.Graph(maple_to_edges(graph, 12)), nx.Graph(maple_to_edges(g, 11)))
             if GM.subgraph_is_monomorphic():
-                if graph in temp_lst_13:
-                    temp_lst_13.remove(graph)
+                if graph in temp_lst_12:
+                    temp_lst_12.remove(graph)
     f = open("min_nonembed_graph_sat_12.txt", "w")
-    for item in temp_lst_13:
+    for item in temp_lst_12:
         f.write(item + "\n")
     f.close()
 
@@ -172,6 +172,13 @@ def filter_non_minimal_13():
         print ("make sure all files are generated")
         sys.exit(1)
     temp_lst_13 = graph_lst_13.copy()
+    for graph in graph_lst_13:
+        for g in graph_lst_13:
+            if graph != g:
+                GM = isomorphism.GraphMatcher(nx.Graph(maple_to_edges(graph, 13)), nx.Graph(maple_to_edges(g, 13)))
+                if GM.subgraph_is_monomorphic():
+                    if graph in temp_lst_13:
+                        temp_lst_13.remove(graph)
     for graph in graph_lst_13:
         for g in graph_lst_12:
             if graph != g:
