@@ -142,19 +142,6 @@ def filter_non_minimal_12():
         f.write(item + "\n")
     f.close()
 
-def verify(n):
-    """n has to be either 10, 11, or 12"""
-    if int(n) == 10:
-        filter_non_minimal_10()
-    elif int(n) == 11:
-        filter_non_minimal_11()
-    elif int(n) == 12:
-        filter_non_minimal_12()
-    elif int(n) == 13:
-        filter_non_minimal_13()
-    else:
-        print ("currently only taking order 10, 11, 12, or 13 for analyze_subgraph.py")
-
 def filter_non_minimal_13():
     try:
         file_13 = open("nonembed_graph_sat_13.txt", "r")
@@ -217,8 +204,10 @@ def verify(n):
         filter_non_minimal_11()
     elif int(n) == 12:
         filter_non_minimal_12()
+    elif int(n) == 13:
+        filter_non_minimal_13()
     else:
-        print ("currently only taking order 10, 11, or 12 for analyze_subgraph.py")
+        print ("currently only taking order 10, 11, 12, 13 for analyze_subgraph.py")
 
 if __name__ == "__main__":
     verify(sys.argv[1])
